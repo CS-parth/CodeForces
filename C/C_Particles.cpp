@@ -53,27 +53,23 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 void init_1(){
     int n;
     cin >> n;
-
-    int hi = n;
-    int lo = 2;
-
-    while(hi - lo > 1){
-        int mid = (hi + lo)/2;
-
-        if(mid*(mid-1)/2 == n){
-            cout << mid << "\n";
-            return;
-        }else if(mid*(mid-1)/2 > n){
-            hi = mid;
-        }else{
-            lo = mid + 1;
-        }
+    // remove the neg
+    vector<int> a(n);
+    input(a);
+    int mx = *max_element(all(a));
+    if(mx <= 0){
+        cout << mx << '\n';
+        return;
     }
-    if(lo*(lo - 1)/2 >= n){
-        cout << lo << "\n";return;
-    }else if(hi*(hi - 1)/2 >= n){
-        cout << hi << "\n";return;
+    int sum1 = 0;
+    int sum2 = 0;
+    for(int i=0;i<n;i+=2){
+        sum1 += max(a[i],0ll);
     }
+    for(int i=1;i<n;i+=2){
+        sum2 += max(a[i],0ll);
+    }
+    cout << max(sum1,sum2) << "\n";
 }
 
 signed main() {
