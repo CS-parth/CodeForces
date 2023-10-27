@@ -3,6 +3,16 @@
 using namespace std;
 
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define MOD 1000000007
+#define MOD1 998244353
+#define INF 1e18
+#define nline "\n"
+#define pb push_back
+#define ppb pop_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define PI 3.141592653589793238462
 #define set_bits __builtin_popcountll
 #define sz(x) ((int)(x).size())
 #define all(x) (x).begin(), (x).end()
@@ -40,52 +50,21 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 #define int long long 
 #define input(a) for (int &x : a) cin >> x;
 
-
-bool isPrime(int num){
-    for(int i = 2; i*i <= num; i++){
-        if(num%i == 0) return false;
-    }
-    return true;
-}
-int smallestprimefact(int num){
-    for(int i = 2;i*i <= num;i++){
-        if(num%i == 0) return i;
-    }
-    if(num > 1){ // for prime numbers
-        return num;
-    }
-    return 2;
-}
-int largestprimefact(int num){
-    int save = 2;
-    for(int i = 2;i*i <= num;i++){
-        if(num%i == 0){
-            save = i;
-            while(num%i == 0){
-                num = num/i;
-            }
-        }
-    }
-    if(num > 1){ // for prime numbers
-        save = num;
-    }
-    return save;
-}
 void init_1(){
-    int n,m;
-    cin >> n >> m;
-    if((n == 1) || (m == 1)){
-        cout << "YES" << "\n"; 
-        return;
-    }   
-    //Case 1 : if n is prime and <= m then NO
-    //Case 2 : if n is Even -> NO
-    //Case 3 : if n is odd and gcd(n.m)!=1 NO
-    if(smallestprimefact(n) <= m){
-        cout << "NO" << "\n";
-    }else{
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    input(a);
+    // edge case 
+    // This is an EVEN/ODD case 
+    if(n&1){
         cout << "YES" << "\n";
-    }
+    }else{
+        for(int i = n-1;i >= 3;i-=2){
+            a[i-2] += (a[i] - a[i-1]);
+        }
+        (a[0] > a[1]) ? cout << "NO" << "\n" : cout << "YES" << "\n";
+    }   
 }
 
 signed main() {

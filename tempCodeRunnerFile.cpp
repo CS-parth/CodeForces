@@ -1,13 +1,18 @@
-while(k>=0){
-        int zero = 0;
-        int one = 0;
-        while(k>=0 && a[k--] == 0){
-            zero++;
+for(int i = 0; i < 25; i++){
+        debug(m);
+        // breaking condition
+        if(m == 0){
+            cout << "NO" << "\n";
+            return;
         }
-        if(k > 0) k++; 
-        while(k>=0 && a[k--] == 1){
-            one++;
+        if(m == 1){ 
+            cout << "YES" << "\n"; 
+            return;
         }
-        if(k > 0) k++;
-        v.pb({zero,one});
+        if(n%m == 0){ 
+            cout << "NO" << "\n"; 
+            return;
+        }
+        m = n%m;
     }
+    cout << "I KNEW I FUCKED" << "\n";

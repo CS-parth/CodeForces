@@ -3,6 +3,16 @@
 using namespace std;
 
 #define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+#define MOD 1000000007
+#define MOD1 998244353
+#define INF 1e18
+#define nline "\n"
+#define pb push_back
+#define ppb pop_back
+#define mp make_pair
+#define ff first
+#define ss second
+#define PI 3.141592653589793238462
 #define set_bits __builtin_popcountll
 #define sz(x) ((int)(x).size())
 #define all(x) (x).begin(), (x).end()
@@ -39,52 +49,67 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 #define int long long 
 #define input(a) for (int &x : a) cin >> x;
-
-
-bool isPrime(int num){
-    for(int i = 2; i*i <= num; i++){
-        if(num%i == 0) return false;
+int MEX(vector<int> a){
+    // int ans = 0;
+    map<int,bool> mp;
+    for(auto &it : a){
+        mp[it] = true;
     }
-    return true;
-}
-int smallestprimefact(int num){
-    for(int i = 2;i*i <= num;i++){
-        if(num%i == 0) return i;
-    }
-    if(num > 1){ // for prime numbers
-        return num;
-    }
-    return 2;
-}
-int largestprimefact(int num){
-    int save = 2;
-    for(int i = 2;i*i <= num;i++){
-        if(num%i == 0){
-            save = i;
-            while(num%i == 0){
-                num = num/i;
-            }
+    for(int i = 0; i <= a.size(); i++){
+        if(mp[i] == false){
+            return i;
         }
     }
-    if(num > 1){ // for prime numbers
-        save = num;
-    }
-    return save;
+    // return ans;
+    return a.size();
 }
 void init_1(){
-    int n,m;
-    cin >> n >> m;
-    if((n == 1) || (m == 1)){
-        cout << "YES" << "\n"; 
+     int n;
+     cin >> n;
+     vector<int> a(n);
+     input(a);
+     int ok = MEX(a);
+     if(ok == 0){
+        cout << "Yes" << "\n";
         return;
-    }   
-    //Case 1 : if n is prime and <= m then NO
-    //Case 2 : if n is Even -> NO
-    //Case 3 : if n is odd and gcd(n.m)!=1 NO
-    if(smallestprimefact(n) <= m){
-        cout << "NO" << "\n";
+     }
+    if(ok == n){
+        cout << "No" << "\n";
+        return;
+    }
+    // check if mex + 1 exists or not 
+    int f = 0;
+    for(int i = 0; i < n;i++){
+        if(a[i] == ok + 1){
+            f = 1;break;
+        }
+    }
+    if(!f){
+        cout << "Yes" << "\n";
     }else{
-        cout << "YES" << "\n";
+        // find first and last occ of ok+1
+        int fst,lst;
+        for(int i = 0;i < n;i++){
+            if(a[i] == ok+1) lst = i;
+        }
+        for(int i = n-1;i >= 0;i--){
+            if(a[i] == ok+1) fst = i;
+        }
+        //mex-1 between fst and lst should not be all mex-1
+        map<int,int> mp;
+        for(int i =0;i<n;i++){
+            if(a[i] <= ok-1) mp[a[i]]++;
+        }
+        for(int i=fst;i<=lst;i++){
+            if(a[i] <= ok-1){
+                mp[a[i]]--;
+                if(mp[a[i]] == 0){
+                    cout << "No" << "\n";
+                    return;
+                }
+            }
+        }
+        cout << "Yes" << "\n";
     }
 }
 
