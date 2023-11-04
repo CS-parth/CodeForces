@@ -51,36 +51,47 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 #define input(a) for (int &x : a) cin >> x;
 
 void init_1(){
-    int n,m;
+    // Two Pointers 
+    int n;
     cin >> n;
-    cin >> m;
-    int i = n-1;
-    int j = m-1;
     vector<int> a(n);
-    vector<int> b(m); // 4 8 16
-    vector<int> prefix(m);
     input(a);
-    input(b);
-    for(int i=0;i<m;i++){
-        b[i] = pow(2,b[i]);
-        prefix[i] = b[i]/2;
-        // cout << b[i] << "\n";
-    }
-    debug(prefix);
-    debug(b);
-    while(i >=0 && j >=0){
-        while(a[i] < b[j]){
+    debug(a);
+    sort(all(a));
+    int x = 0;
+    int ans = 0;
+    int i,j;
+    for(i = 0,j = n-1;i < j;){
+        // remove i
+        if(a[j] >= x + a[i]){
+            x += a[i];
+            ans += a[i];
+            i++;
+        }else{
+            ans += a[j]-x;
+            a[i] -= (a[j]-x);
+            x = a[j];
+        }
+        // try removing a[j]
+        if(a[j] <= x){
+            x = 0;
             j--;
+            ans++;
         }
-        if(j >=0 && a[i]%b[j] == 0){
-            a[i] += prefix[j];
-        }
-        i--;
     }
-    // print array
-    for(int i=0;i<n;i++){
-        cout << a[i] << " ";
-    }cout << "\n";
+    if(i == j){
+        if(a[j]<=x){
+            ans++;
+        }else{
+            if(a[j] == 1) ans++;
+            else if((a[j]-x)&1){
+                ans += 1 + ((a[j]-x)/2) + 1;
+            }else{
+                ans += 1 + ((a[j]-x)/2);
+            }
+        }
+    }
+    cout << ans << "\n";
 }
 
 signed main() {
