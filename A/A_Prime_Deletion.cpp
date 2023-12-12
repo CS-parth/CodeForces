@@ -49,50 +49,41 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 #define int long long 
 #define input(a) for (int &x : a) cin >> x;
-
-int n;
-int k;
-set<int> st;
-unordered_map<int,bool> vis;
-void dfs(int level){
-    if(level < 0) return;
-    if(level >= n) return;
-    if(vis[level]) return;
-    vis[level] = true;
-    st.insert(level);
-    dfs(level + k);
-    dfs(level + k + 1);
-    dfs(level - k);
-    dfs(level - k - 1);
+bool isprime(int num){
+    for(int i = 2;i*i <= num;i++){
+        if(num%i == 0){
+            return false;
+        }
+    }
+    return true;
 }
+int prime[40];
 void init_1(){
-    //  int k;
-     cin >> n >> k;
-     string s;
-     string t;
-     cin >> s >> t;
-    //  for(int i = 0;i < 2*1e5 + 1;i++) vis[i] = false;
-     vis.clear();
-     for(int i = 0;i < n;i++){
-        if(!vis[i]){
-            st.clear();
-            dfs(i);
-            // a culster is just made
-            string a = "",b = "";
-            // cout << st.size();
-            for(auto &it : st){
-                a += s[it];
-                b += t[it];
-            }
-            sort(all(a));
-            sort(all(b));
-            if(a != b){
-                cout << "NO" << "\n";
+    string str;
+    cin >> str;
+    unordered_map<int,int> mp;
+    for(int i = 0;i < str.size();i++){
+        mp[str[i]-'0'] = i;
+        debug(str[i]-'0');
+        debug(mp[str[i]-'0']);
+    }
+    // check evey two prime 
+    for(int i = 11; i <= 99;i++){
+        if(isprime(i)){
+            debug(i);
+            int b = i%10; // second
+            int a = i/10; // first 
+            debug(a);
+            debug(b);
+            debug(mp[a]);
+            debug(mp[b]);
+            if(mp[a] < mp[b]){
+                cout << i << "\n";
                 return;
             }
         }
-     }
-     cout << "YES" << "\n";
+    }
+    cout << -1 << "\n";
 }
 
 signed main() {

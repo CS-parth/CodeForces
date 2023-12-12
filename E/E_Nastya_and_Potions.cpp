@@ -50,50 +50,58 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 #define int long long 
 #define input(a) for (int &x : a) cin >> x;
 
-int n;
-int k;
-set<int> st;
-unordered_map<int,bool> vis;
-void dfs(int level){
-    if(level < 0) return;
-    if(level >= n) return;
-    if(vis[level]) return;
-    vis[level] = true;
-    st.insert(level);
-    dfs(level + k);
-    dfs(level + k + 1);
-    dfs(level - k);
-    dfs(level - k - 1);
+int dp[200002];
+int a[200002];
+vector<vector<int>> adj(200002);
+int dfs(int level){
+    if(dp[level] != -1) return dp[level];
+    int ans = 0;
+    if(adj[level].size() == 0){
+        return dp[level] = a[level];
+    }
+    for(int i = 0;i < adj[level].size();i++){
+        // cout << it << "\n";
+        ans += dfs(adj[level][i]);
+    }
+    // if(ans == 0) ans = 1e9;
+    // cout << level << ans << "\n";
+    return dp[level] = min(a[level],ans);
 }
 void init_1(){
-    //  int k;
-     cin >> n >> k;
-     string s;
-     string t;
-     cin >> s >> t;
-    //  for(int i = 0;i < 2*1e5 + 1;i++) vis[i] = false;
-     vis.clear();
-     for(int i = 0;i < n;i++){
-        if(!vis[i]){
-            st.clear();
-            dfs(i);
-            // a culster is just made
-            string a = "",b = "";
-            // cout << st.size();
-            for(auto &it : st){
-                a += s[it];
-                b += t[it];
-            }
-            sort(all(a));
-            sort(all(b));
-            if(a != b){
-                cout << "NO" << "\n";
-                return;
-            }
+    memset(dp,-1,sizeof(dp));
+    // for(int i = 0;i < 200002;i++) adj[i].clear();
+    int n,k;
+    cin >> n >> k;
+    // vector<vector<int>> adj(n);
+    for(int i = 0;i < n;i++){
+        cin >> a[i];
+    }
+    int ok;
+    for(int i = 0;i < k;i++){
+        cin >> ok;
+        a[ok-1] = 0;
+    }
+    for(int i = 0;i < n;i++){
+        // cout << a[i] << "\n";
+        // all these node will connect to i
+        int size;
+        cin >> size;
+        // if(size == 0) continue;
+        // cout << size << "\n";
+        adj[i].clear();
+        for(int j = 0;j < size;j++){
+            int x;
+            cin >> x;
+            // cout << x-1 << "\n";
+            adj[i].push_back(x-1);
         }
-     }
-     cout << "YES" << "\n";
-}
+    }
+    // cout << "Br" << "\n";
+    for(int i = 0;i < n;i++){
+        cout << dfs(i) << " ";
+        // cout << 1 << "\n";
+    }cout << "\n";
+}   
 
 signed main() {
 std::ios::sync_with_stdio(false);

@@ -50,49 +50,27 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 #define int long long 
 #define input(a) for (int &x : a) cin >> x;
 
-int n;
-int k;
-set<int> st;
-unordered_map<int,bool> vis;
-void dfs(int level){
-    if(level < 0) return;
-    if(level >= n) return;
-    if(vis[level]) return;
-    vis[level] = true;
-    st.insert(level);
-    dfs(level + k);
-    dfs(level + k + 1);
-    dfs(level - k);
-    dfs(level - k - 1);
-}
 void init_1(){
-    //  int k;
-     cin >> n >> k;
-     string s;
-     string t;
-     cin >> s >> t;
-    //  for(int i = 0;i < 2*1e5 + 1;i++) vis[i] = false;
-     vis.clear();
-     for(int i = 0;i < n;i++){
-        if(!vis[i]){
-            st.clear();
-            dfs(i);
-            // a culster is just made
-            string a = "",b = "";
-            // cout << st.size();
-            for(auto &it : st){
-                a += s[it];
-                b += t[it];
-            }
-            sort(all(a));
-            sort(all(b));
-            if(a != b){
-                cout << "NO" << "\n";
+     string a;
+     string b;
+     cin >> a;
+     cin >> b;
+     if(a.size() == 2){
+        cout << "YES" << "\n";
+        return;
+     }
+     if((a[1] == '1' && b[1] == '1') || (a[a.size()-1] == '0' && b[a.size()-1] == '0')){
+        cout << "YES" << "\n";
+        return;
+     }else{
+        for(int i = 1; i < a.size()-1;i++){
+            if(a[i] == '0' && b[i] == '0' && a[i+1] == '1' && b[i+1] == '1'){
+                cout << "YES" << "\n";
                 return;
             }
         }
      }
-     cout << "YES" << "\n";
+     cout << "NO" << "\n";
 }
 
 signed main() {
