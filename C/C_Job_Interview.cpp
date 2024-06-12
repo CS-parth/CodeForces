@@ -17,106 +17,117 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    // cout << 1 << "\n";
     int n,m;
     cin >> n >> m;
     vector<int> a(n+m+1);
-    vector<int> b(n+1+m);
-    input(a);input(b);
-    // cout << 1 << "\n";
-    unordered_map<int,pair<int,int>> mp; // rem n,m
-    unordered_map<int,int> mp1; // sum
-    int temp_n = n;
-    int temp_m = m;
-    int sum = 0;
+    vector<int> b(n+m+1);
+    input(a);
+    input(b);
+    if(n==0 && m==0){
+        cout << 0 << "\n";
+        return;
+    }
+    set<int> p;
+    set<int> t;
     for(int i = 0;i < n+m+1;i++){
-        if(b[i] > a[i]){
-            if(temp_m){
-                temp_m--;
-                sum += b[i];
-            }else{
-                temp_n--;
-                sum += a[i];
+        if(a[i] > b[i]) p.insert(i);
+        else t.insert(i);
+    }
+    if(p.size() >= n+1){
+        int k = 0;
+        for(auto &it : p){
+            if((k) > n){
+                t.insert(it);
             }
-        }else{
-            if(temp_n){
-                temp_n--;
-                sum += a[i];
-            }else{
-                temp_m--;
-                sum += b[i];
-            }
+            k++;
         }
-        mp[i] = {temp_n,temp_m};
-        mp1[i] = sum;
-    }
-    vector<int> p;
-    vector<int> t;
-    for(int i = 0;i < n;i++){
-        if(a[i] > b[i]) p.push_back(i);
-        else t.push_back(i);
-    }
-    vector<int> pi_p(p.size());
-    vector<int> pi_t(t.size());
-    if(p.size()!=0)
-    pi_p[0] = p[0];
-    for(int i = 1;i < p.size();i++){
-        pi_p[i] = pi_p[i-1] + p[i];
-    }
-    if(t.size()!=0)
-    pi_t[0] = t[0];
-    for(int i = 1;i < t.size();i++){
-        pi_t[i] = pi_t[i-1] + t[i];
-    }
-    vector<int> ans;
-    for(int i = 0;i < n+m+1;i++){ // final looping 
-        // remove i
-        int temp = mp1[i]; // back part
-        // i+1
-        int temp_n = mp[i].first;
-        int temp_m = mp[i].second;
-        // take piority based;
-        int lst_p = upper_bound(all(p),i) - p.begin(); // last notTaken
-        int lst_t = upper_bound(all(t),i) - t.begin(); // last notTaken
-        if(temp_n){
-            int idx = upper_bound(all(p),i) - p.begin();
-            // if(idx == p.size()) break;
-            int lst = idx+temp_n-1;
-            if(lst < p.size()){
-                temp += pi_p[lst] - (idx != 0) ? pi_p[idx-1] : 0;
-                lst_p = lst+1;
-                temp_n = 0;
-            }else{
-                lst_p = p.size();
-                temp += pi_p[lst_p-1] - (idx != 0) ? pi_p[idx-1] : 0;
-                temp_n -= lst_p - idx;
+        k = 0;
+        vector<int> to_remove;
+        for(auto &it : p){
+            if((k) > n){
+                to_remove.emplace_back(it);
             }
+            k++;
         }
-        if(temp_m){
-            int idx = upper_bound(all(t),i) - t.begin();
-            // if(idx == t.size()) break;
-            int lst = idx + temp_m -1;
-            if(lst < t.size()){
-                temp += pi_t[lst] - (idx != 0) ? pi_t[idx-1] : 0;
-                lst_t = lst+1;
-                temp_m = 0;
+        for(auto &it : to_remove) p.erase(it);
+        // print(p);
+        // print(t);
+        int total_sum_p = 0;
+        int total_sum_t = 0;
+        for(auto &it : p) total_sum_p += a[it];
+        for(auto &it : t) total_sum_t += b[it];
+        vector<int> ans;
+        for(int i = 0;i < n+m+1;i++){
+            // if ith person is absent
+            int cnt = total_sum_p;
+            // cout << i << ": " << cnt << "\n";
+            if(p.count(i)){
+                cnt -= a[i];
             }else{
-                lst_t = t.size();
-                temp += pi_t[lst_p-1] - (idx != 0) ? pi_p[idx-1] : 0;
-                temp_m -= lst_t - idx;
+                if(!p.empty()) cnt -= a[*p.rbegin()];
             }
+            // cout << i << ": " << cnt << "\n";
+            // now take all the testes
+            cnt += total_sum_t;
+            // cout << i << ": " << cnt << "\n";
+            if(t.count(i)){
+                cnt -= b[i];
+                if(!p.empty())
+                cnt += b[*p.rbegin()];
+            }
+            // cout << i << ": " << cnt << "\n";
+            ans.push_back(cnt);
         }
-
-        // rem programmers 
-        if(lst_t+temp_n-1 < pi_t.size())
-        temp += pi_t[lst_t+temp_n-1] - (lst_t != 0) ? pi_t[lst_t-1] : 0;
-        // rem testers
-        if(lst_p+temp_m-1 < pi_p.size())
-        temp += pi_p[lst_p+temp_m-1] - (lst_p != 0) ? pi_p[lst_p-1] : 0;
-        // cout << i << "\n";
-        ans.push_back(temp);    
+        print(ans);
+    }else{
+        // if(t.size() >= m+1)
+        int k = 0;
+        for(auto &it : t){
+            if(k > m){
+                p.insert(it);
+            }
+            k++;
+        }
+        k = 0;
+        vector<int> to_remove;
+        for(auto &it : t){
+            if(k > m){
+                to_remove.emplace_back(it);
+            }
+            k++;
+        }
+        for(auto &it : to_remove) t.erase(it);
+        // print(p);
+        // print(t);
+        int total_sum_p = 0;
+        int total_sum_t = 0;
+        for(auto &it : p) total_sum_p += a[it];
+        for(auto &it : t) total_sum_t += b[it];
+        // cout << total_sum_p << " " << total_sum_t << "\n";
+        vector<int> ans;
+        for(int i = 0;i < n+m+1;i++){
+            // if ith person is absent
+            int cnt = total_sum_t;
+            // cout << i << ": " << cnt << "\n";
+            if(t.count(i)){
+                cnt -= b[i];
+            }else{
+                if(!t.empty()) cnt -= b[*t.rbegin()];
+            }
+            // cout << i << ": " << cnt << "\n";
+            // now take all the testes
+            cnt += total_sum_p;
+            // cout << i << ": " << cnt << "\n";
+            if(p.count(i)){
+                cnt -= a[i];
+                if(!t.empty())
+                cnt += a[*t.rbegin()];
+            }
+            // cout << i << ": " << cnt << "\n";/
+            ans.push_back(cnt);
+        }
+        print(ans);
     }
-    print(ans);
 }
 
 signed main() {

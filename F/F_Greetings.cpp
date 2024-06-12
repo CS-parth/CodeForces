@@ -12,31 +12,33 @@ using namespace std;
 #define sz(x) ((int)(x).size())
 #define all(x) (x).begin(), (x).end()
 
-#define int long long 
+// #define int long long 
 #define input(a) for (auto &x : a) cin >> x;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+ 
+typedef __gnu_pbds::tree<int, __gnu_pbds::null_type, less<int>, __gnu_pbds::rb_tree_tag, __gnu_pbds::tree_order_statistics_node_update> ordered_set;
+
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }
+    int n;
+    cin >> n;
+    vector<pair<int,int>> pr(n);
+    for(int i = 0;i < n;i++){
+        cin >> pr[i].second >> pr[i].first;
     }
+    sort(all(pr));
+    ordered_set st;
+    long long ans = 0;
+    int val = 0;
+    st.clear();
+    for(int i = 0;i < n;i++){
+        ans = ans + val - st.order_of_key(pr[i].second);
+        st.insert(pr[i].second);
+        val++;
+    }
+    cout << ans << '\n';
 }
 
 signed main() {

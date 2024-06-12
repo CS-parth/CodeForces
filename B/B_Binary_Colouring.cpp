@@ -17,26 +17,38 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
+    int n;
+    cin >> n;
+    vector<int> bits(32,0);
+    // cout << str << "\n";
+    for(int i = 30;i >= 0;i--){
+        if(n&(1<<i)) bits[i] = 1;
+    }
+    int i = 0;
+    int j = 0;
+    // print(bits);    
+    // reverse(all(str));
+    while(j < 32){
+        if(bits[j] == 1) j++;
+        else{
+            // encountered a zero
+            if(i==j){
+                i++;
+                j++;
+            }else if(i+1==j){
+                i+=2;
+                j++;
             }else{
-                cout << "Draw" << "\n";
-            }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
+                bits[j] = 1;
+                bits[i] = -1;
+                for(int k = i+1;k < j;k++) bits[k] = 0;
+                i = j;
             }
         }
     }
+    // reverse(all(bits));
+    cout << 32 << "\n";
+    print(bits);
 }
 
 signed main() {

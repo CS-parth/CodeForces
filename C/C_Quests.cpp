@@ -17,26 +17,33 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }
+    // idx = min(n-1,k-1);
+    // take all till idx and then += mxbi*(k-len)
+    int n,k;
+    cin >> n >> k;
+    vector<int> a(n);
+    vector<int> b(n);
+    input(a);
+    input(b);
+    vector<int> mx(n);
+    vector<int> pi(n);
+    int m = -1;
+    for(int i = 0;i < n;i++){
+        mx[i] = max(b[i],m);
+        m = mx[i];
     }
+    // print(mx);
+    for(int i = 0;i < n;i++){
+        if(i==0) pi[i] = a[i];
+        else pi[i] = pi[i-1] + a[i];
+    }
+    int idx = min(n-1,k-1);
+    int ans = -1;
+    for(;idx >= 0;idx--){
+        // cout << idx << " " << pi[idx] << " " << mx[idx]*(k - (idx+1)) << "\n";
+        ans = max(pi[idx] + mx[idx]*(k - (idx+1)),ans);
+    }
+    cout << ans << "\n";
 }
 
 signed main() {

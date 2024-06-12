@@ -17,26 +17,25 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
+    int n,w;
+    cin >> n >> w;
+    vector<int> a(n);
+    input(a);
+    int l = 0; // always true
+    int r = 2*1e9+2; // always false
+    while (r-l > 1){
+        int mid = (r+l)>>1;
+        int water = 0;
+        for(int i = 0; i < n;i++){
+            water += (mid-a[i] > 0) ? mid-a[i] : 0;
+        }
+        if(water <= w){
+            l = mid;
         }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
+            r = mid;
         }
     }
+    cout << l << '\n';
 }
 
 signed main() {

@@ -26,7 +26,7 @@ void init_1(){
     int lst_dis = 0;
     int lst_time = 0;
     for(int i = 0;i < k;i++){
-        s[i] = (double)(a[i]-lst_dis)/(double)(b[i]-lst_time);
+        s[i] = (double)((double)(b[i]-lst_time)/(double)(a[i]-lst_dis));
         lst_dis = a[i];
         lst_time = b[i];
     }
@@ -42,12 +42,12 @@ void init_1(){
         }else{
             int idx = itr-a.begin()-1;
             int rem_dis = (idx == -1) ? x : x-a[idx];
-            double speed = s[idx+1];
-            double time = (double)rem_dis/(double)speed;
+            double speed = (double)s[idx+1];
+            double time = (double)((double)rem_dis*(double)speed);
             // cout << idx << " " << rem_dis << " " << speed << " " << time << "\n";
             time = (double)time + (double)((idx == -1) ? (double)0 : (double)b[idx]);
             // cout << time << "\n";
-            ans.push_back((int)time);
+            ans.push_back(floor(time));
         }
     }
     print(ans);

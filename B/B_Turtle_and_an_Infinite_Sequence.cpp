@@ -17,30 +17,27 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
+    int n,m;
+    cin >> n >> m;
+    int l = max(0ll,n-m);
+    int r = n+m;
+    // cout << lBit << " " << rBit << "\n";
+    int ans = l;
+    for(int i = 30;i>=0;i--){
+        int val = l|(1<<i);
+        // remove all 1's after ith
+        val = (val>>i);
+        val = (val<<i);
+        if(val <= r){
+            // cout << i << " " << (1<<i) << "\n";
+            ans|=(val);
         }
-    }
+    }   
+    cout << ans << "\n";
 }
 
 signed main() {
-std::ios::sync_with_stdio(false);
+std::ios::sync_with_stdio(false);  
     // fastio();
     int T;
     cin >> T;

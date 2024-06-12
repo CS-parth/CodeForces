@@ -17,26 +17,37 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
+    vector<string> a(10);
+    input(a);
+    // int idx = 1;
+    int dir = 0; // 0 1 2 3
+    int ans = 0;
+    for(int i = 0; i < 5;i++){
+        int x = i;
+        int y = i;
+        dir = 0;
+        do{
+            if(a[x][y] == 'X') ans+=(i+1);
+            // down
+            if(x == i && (9-y) == i){
+                dir = 1;
+            }else if((9-x) == i && (9-y) == i){
+                dir = 2;
+            }else if((9-x) == i && y == i){
+                dir = 3;
             }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
+            if(dir == 0){
+                y++;
+            }else if(dir == 1){
+                x++;
+            }else if(dir == 2){
+                y--;
             }else{
-                cout << "Draw" << "\n";
+                x--;
             }
-        }
+        }while(!(x == i && y == i));
     }
+    cout << ans << "\n";
 }
 
 signed main() {

@@ -17,25 +17,22 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
+    int a,b,c;
+    cin >> a >> b >> c;
+    if(c != a+1){
+        cout << -1 << "\n";
+        return;
+    }
+    // this will generate a+1 spaces
+    int l = (a==0) ? -1 : log2(a); 
+    int add = (pow(2,l) == (a-1)) ? 1 : 0;
+    cout << add << "\n";
+    if(b < a+1){
+        cout << "from first" << " ";
+        cout << l + 1 << "\n";
     }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }
+        cout << "from second" << " ";
+        cout << l + b/(a+1) + 1 + add << "\n";
     }
 }
 

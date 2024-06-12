@@ -17,26 +17,35 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
-    }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    input(a);
+    vector<int> pi(n);
+    pi[0] = -a[0];
+    bool f = true;
+    for(int i = 1;i < n;i++){
+        // cout << f << "\n";
+        if(f == true){
+            pi[i] = pi[i-1] + a[i];
         }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
+            pi[i] = pi[i-1] - a[i];
         }
+        f = f^true;
     }
+    // print(pi);
+    set<int> st;
+    st.insert(0);
+    for(int i = 0;i < n;i++){
+        // cout << pi[i] << "\n";
+        if(st.count(pi[i])){
+            cout << "YES" << "\n";
+            return;
+        }
+        // f = !f;
+        st.insert(pi[i]);
+    }
+    cout << "NO" << "\n";
 }
 
 signed main() {

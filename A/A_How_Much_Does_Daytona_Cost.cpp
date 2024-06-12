@@ -17,25 +17,18 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int h,w,x1,y1,x2,y2;
-    cin >> h >> w >> x1 >> y1 >> x2 >> y2;
-    // cout << x2-x1 << " " << y2-y1 << "\n";
-    if((x2-x1) <= 0){
-        cout << "Draw" << "\n";
+    int n,k;
+    cin >> n >> k;
+    map<int,int> mp;
+    for(int i = 0;i < n;i++){
+        int x;
+        cin >> x;
+        mp[x]++;
+    }
+    if(mp.count(k)){
+        cout << "YES" << '\n';
     }else{
-        if((x2-x1)&1){
-            if(abs(y2-y1) <= (x2-x1-1)){
-                cout << "Alice" << '\n';
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }else{
-            if((abs(y2-y1)+1) <= (x2-x1-1)){
-                cout << "Bob" << "\n";
-            }else{
-                cout << "Draw" << "\n";
-            }
-        }
+        cout << "NO" << '\n';
     }
 }
 

@@ -19,33 +19,40 @@ using namespace std;
 void init_1(){
     int n,m;
     cin >> n >> m;
-    multiset<int> st2;
-    multiset<int> st1;
-    for(int i = 0;i < n;i++){
-        int x;cin >> x;
-        st1.insert(x);
+    vector<int> a(n);
+    vector<int> b(m);
+    input(a);
+    input(b);
+    sort(all(a));
+    sort(all(b),greater<int>());
+    vector<int> bpi(m,0);
+    for(int i = m-n;i < m;i++){
+        int val = (i!=0) ? bpi[i-1] : 0;
+        bpi[i] = val + abs(b[i]-a[i-(m-n)]);
     }
-    for(int i = 0;i < m;i++){
-        int x;cin >> x;
-        st2.insert(x);
-    }
+    // print(bpi);
+    int i = 0;
+    int j = 0;
+    int size = m;
+    int D = 0;
     int ans = 0;
-    while(!st1.empty()){
-        if(st1.size() == 1){
-            if(abs(*st1.begin()-*st2.rbegin()) > abs(*st1.rbegin()-*st2.begin())){
-                ans += abs(*st1.begin()-*st2.rbegin());
-            }else{
-                ans += abs(*st1.rbegin()-*st2.begin());
-            }
-            break;
+    if(n==m){
+        cout << bpi[n-1] << "\n";
+        return;
+    }
+    while(j < size){
+        // cal
+        if(j-i+1 < m-n){
+            j++;
+        }else{
+            // answer
+            // cout << D << " " << bpi[m-1]  << " " << bpi[j] << "\n";
+            ans = max(D+bpi[m-1]-bpi[j],ans);
+            // remove 
+            D += abs(a[i]-b[i]);
+            i++;
+            j++;
         }
-        ans += abs(*st1.begin()-*st2.rbegin());
-        ans += abs(*st2.begin()-*st1.rbegin());
-        // remove both of them
-        st2.erase(st2.begin());
-        st2.erase(--st2.end());
-        st1.erase(st1.begin());
-        st1.erase(--st1.end());
     }
     cout << ans << "\n";
 }

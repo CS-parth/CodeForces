@@ -20,29 +20,31 @@ void init_1(){
     int n;
     cin >> n;
     vector<int> a(n);
+    vector<int> b(n);
+    vector<int> c(n);
     input(a);
-    int sum = 0;
-    for(int i = 0;i < n;i++) sum += a[i];
-    auto is_square = [&](int node){
-         int l = 0;
-         int r = 1e8;
-         while(r-l > 1){
-            int mid = (r+l)>>1;
-            if(mid*mid == node) return mid;
-            if(mid*mid < node){
-                l = mid;
-            }else{
-                r = mid;
-            }
-         }
-         return -1ll;
-    };
-    if(is_square(sum)!=-1){
-        cout << "YES" << "\n";
-    }else{
-        cout << "NO" << "\n";
+    input(b);
+    input(c);
+    vector<set<pair<int,int>>> sts(3);
+    for(int i = 0;i < n;i++){
+        sts[0].insert({a[i],i});
+        if(sts[0].size() > 3) sts[0].erase(sts[0].begin());
+        sts[1].insert({b[i],i});
+        if(sts[1].size() > 3) sts[1].erase(sts[1].begin());
+        sts[2].insert({c[i],i});
+        if(sts[2].size() > 3) sts[2].erase(sts[2].begin());
     }
-}
+    int ans = -1;
+    for(auto &itr1 : sts[0]){
+        for(auto &itr2 : sts[1]){
+            for(auto &itr3 : sts[2]){
+                set<int> st = {itr1.second,itr2.second,itr3.second};
+                if(st.size() == 3) ans = max(itr1.first + itr2.first + itr3.first,ans);
+            }
+        }
+    }
+    cout << ans << "\n";
+}   
 
 signed main() {
 std::ios::sync_with_stdio(false);
