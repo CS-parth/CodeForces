@@ -17,25 +17,30 @@ using namespace std;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
 void init_1(){
-    int n,q;
-    cin >> n >> q;
-    vector<int> a(n);
-    input(a);
-    for(int i = 0;i < q;i++){
-        int l,r;
-        cin >> l >> r;
-        l--;r--;
-        int mx = 0;
-        unordered_map<int,int> mp;
-        for(int i = l;i <= r;i++){
-            mp[a[i]]++;
-            if(mx < mp[a[i]]) mx = mp[a[i]];
+    int n,m;
+    cin >> n >> m;
+    vector<int> answer;
+    answer.push_back(n);
+    for(int i = 0;i <= 62;i++){
+        int bit1 = ((n>>i)&1);
+        int bit2 = ((m>>i)&1);
+        if(bit1 == bit2) continue;
+        else{
+            int val = (1ll<<i);
+            // cout << val << '\n';
+            if(val >= n){
+                cout << -1 << '\n';
+                return;
+            }
+            answer.push_back(answer.back()^val);
+            n = answer.back();
         }
-        if(mx <= r-l+1-mx){
-            cout << "YES" << "\n";
-        }else{
-            cout << "NO" << "\n";
-        }
+    }
+    if(answer.back() == m){
+        cout << answer.size()-1 << '\n';
+        print(answer);
+    }else{
+        cout << -1 << '\n';
     }
 }
 
