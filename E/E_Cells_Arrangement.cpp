@@ -19,24 +19,11 @@ using namespace std;
 void init_1(){
     int n;
     cin >> n;
-    int i,j;
-    cout << n << " " << 1 << "\n";
-    cout << n << " " << 2 << "\n";
-    i = n;j = 2;
-    int di[]= {-1,0,1,0};
-    int dj[] = {0,1,0,-1};
-    int k = n-2;
-    int idx = 0;
-    while(k--){
-        // cout << k << " " << di[idx] << " " << dj[idx] << "\n";
-        int ni = i + (k+2)*di[idx];
-        int nj = j + (k+2)*dj[idx];
-        cout << ni << " " << nj << "\n"; 
-        i = ni;
-        j = nj;
-        idx++;
-        idx = (idx)%4;
+    for(int i = 0;i < n-2;i++){
+        cout << i+1 << " " << i+1 << "\n";
     }
+    cout << n-1 << " " << n << "\n";
+    cout << n << " " << n << "\n";
     cout << "\n";
 }
 
