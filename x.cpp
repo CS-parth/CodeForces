@@ -1,25 +1,34 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdbool.h>
-#include <sys/wait.h>
 
-int main(){
-    // ./binary is a binary of a infinite loop code
-    FILE *ptr = popen("sh -c ': | timeout 2s ./binary; echo $?'","r");
-    int termination_status = pclose(ptr);
-    if(WIFEXITED(termination_status)){
-        int exit_code = WEXITSTATUS(termination_status);
-        printf("The code exited by itself with exit_code : %d", exit_code); // The code exited by itself with exit_code : 141
-    }else if(WIFSIGNALED(termination_status)){
-        int signal_num = WTERMSIG(termination_status);
-        printf("The code exited by outside process with termination status : %d", signal_num);
-    }else if(WCOREDUMP(termination_status)){
-        printf("Segmentation fault [core dumped]");
-    }else if(WIFSTOPPED(termination_status)){
-        int signal_num = WSTOPSIG(termination_status);
-        printf("Child process stopped with signal : %d", signal_num);
+#include<bits/stdc++.h>
+
+using namespace std;
+
+void init_1(){
+    string s,t;
+    cin >> s >> t;
+    string ans = "";
+    bool flag = false;
+    for(int i = 0;i < (int)t.size();i++){
+        if(t[i] == 'T'){
+            ans += s;
+            flag = true;
+            break;
+        }else{
+            ans += 'A';
+        }
     }
-    return 0;
-} 
+    if(flag == false){
+        cout << -1 << '\n';
+        return;
+    }
+    while((int)ans.size() != ((int)s.size() + (int)t.size()-1)) ans += 'A';
+    cout << ans << "\n";
+}
+
+signed main() {
+    int T;
+    cin >> T;
+    for(int k = 0 ; k < T ; k++){
+        init_1();  
+    }
+}
