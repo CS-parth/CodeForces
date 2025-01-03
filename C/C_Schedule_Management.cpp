@@ -17,41 +17,44 @@ using namespace std;
 #define input(a) for (auto &x : a) cin >> x;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
-void init_1(){
-    int n;
-    cin >> n;
-    vector<char> a(n);
-    input(a);
-    int color = 1;
-    int sum = 0;
-    vector<int> colors(n,0);
-    for(int i = 0;i < n;i++){
-        if(a[i] == ')') sum--;
-        else sum++;
-        if(sum == 0){
-            colors[i] = color;
-        }else if(sum == 1){ // starting of BS
-            color = 1;
-            colors[i] = color;
-        }else if(sum == -1){ // starting of RBS
-            color = 2;
-            colors[i] = color;
-        }else{
-            colors[i] = color;
-        }
-        // cout << sum << " " << color << "\n";
+
+bool isCheck(vector<int> b,int mid){
+    int collect = 0;
+    // print(b);
+    // cout << mid << '\n';
+    for(int i = 1;i < b.size();i++){
+        if(b[i]>mid) collect+=(b[i]-mid);
     }
-    // cout << sum << "\n";
-    // it should end
-    if(sum == 0){
-        set<int> st(colors.begin(),colors.end());
-        cout << st.size() << '\n';
-        if(st.size() == 1) colors.assign(n,1);
-        print(colors);
-    }else{
-        cout << -1 << "\n";
+    for(int i = 1;i < b.size();i++){
+        if(b[i]<mid) collect -= (mid-b[i])/2;
     }
+    // cout << collect << "\n";
+    return (collect<=0);
 }
+void init_1(){
+    int n,m;
+    cin >> n >> m;
+    vector<int> a(m);
+    input(a);
+    int low = 1; 
+    int high = 1e9;
+    vector<int> b(n+1,0);
+    for(int i = 0;i < m;i++) b[a[i]]++; 
+    while(high - low > 1){
+        int mid = (high+low)/2;
+        // let's say we have mid hours 
+        if(isCheck(b,mid)){
+            high = mid;
+        }else{
+            low = mid;
+        }
+    }
+    if(isCheck(b,low)){
+        cout << low << "\n";
+    }else{
+        cout << high << "\n";
+    }
+}   
 
 signed main() {
 std::ios::sync_with_stdio(false);

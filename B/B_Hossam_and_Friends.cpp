@@ -17,40 +17,45 @@ using namespace std;
 #define input(a) for (auto &x : a) cin >> x;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
-void init_1(){
-    int n;
-    cin >> n;
-    vector<char> a(n);
-    input(a);
-    int color = 1;
-    int sum = 0;
-    vector<int> colors(n,0);
-    for(int i = 0;i < n;i++){
-        if(a[i] == ')') sum--;
-        else sum++;
-        if(sum == 0){
-            colors[i] = color;
-        }else if(sum == 1){ // starting of BS
-            color = 1;
-            colors[i] = color;
-        }else if(sum == -1){ // starting of RBS
-            color = 2;
-            colors[i] = color;
+void init_1(){  
+    int n,m;
+    cin >> n >> m;
+    int i = 1;
+    int j = 1;
+    int size = n;
+    vector<int> nf(n+2,n+1);
+    for(int i = 0;i < m;i++){
+        int a,b;
+        cin >> a >> b;
+        if(b<a) swap(a,b);
+        nf[a] = min(nf[a],b);
+    }
+    int ans = 0;
+    multiset<int> st;
+    // print(nf);
+    while(j <= size){
+        st.insert(nf[j]);
+        // shift 
+        if(j==(*st.begin())){
+            // shift the i
+            while(!st.empty() && j==(*st.begin())){
+                st.erase(st.lower_bound(nf[i]));
+                i++;
+            }
+            // cout << 1 << " self" << "\n";
+            ans += (j-i+1);
+            // shift the window
+            j++;
         }else{
-            colors[i] = color;
+            // cout << j-i+1 << "\n";
+            ans += (j-i+1);
+            // shift the window
+            j++;
         }
-        // cout << sum << " " << color << "\n";
     }
-    // cout << sum << "\n";
-    // it should end
-    if(sum == 0){
-        set<int> st(colors.begin(),colors.end());
-        cout << st.size() << '\n';
-        if(st.size() == 1) colors.assign(n,1);
-        print(colors);
-    }else{
-        cout << -1 << "\n";
-    }
+    // calculate the final values
+    // ans += (n-i+1);
+    cout << ans << '\n'; 
 }
 
 signed main() {

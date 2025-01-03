@@ -17,40 +17,49 @@ using namespace std;
 #define input(a) for (auto &x : a) cin >> x;
 #define print(a) for (auto &x : a) cout << x << " ";cout << "\n";
 
+vector<vector<int>> pi;
+bool predicate(int k,int mid,int l){
+    int nd = 0;
+    for(int j = 0;j < 31;j++){
+        int val = pi[mid][j];
+        if(l!=0) val -= pi[l-1][j];
+        if(val == (mid-l+1)) nd = nd|(1<<j);
+    }
+    return (nd>=k);
+}
 void init_1(){
     int n;
     cin >> n;
-    vector<char> a(n);
+    vector<int> a(n);
+    pi = vector<vector<int>>(n,vector<int>(32,0));
     input(a);
-    int color = 1;
-    int sum = 0;
-    vector<int> colors(n,0);
     for(int i = 0;i < n;i++){
-        if(a[i] == ')') sum--;
-        else sum++;
-        if(sum == 0){
-            colors[i] = color;
-        }else if(sum == 1){ // starting of BS
-            color = 1;
-            colors[i] = color;
-        }else if(sum == -1){ // starting of RBS
-            color = 2;
-            colors[i] = color;
-        }else{
-            colors[i] = color;
+        for(int j = 0;j < 31;j++){
+            if(i!=0) pi[i][j] += pi[i-1][j];
+            pi[i][j] += (a[i]>>j)&1;
         }
-        // cout << sum << " " << color << "\n";
     }
-    // cout << sum << "\n";
-    // it should end
-    if(sum == 0){
-        set<int> st(colors.begin(),colors.end());
-        cout << st.size() << '\n';
-        if(st.size() == 1) colors.assign(n,1);
-        print(colors);
-    }else{
-        cout << -1 << "\n";
-    }
+    int q;
+    cin >> q;
+    for(int i = 0;i < q;i++){
+        int l,k;
+        cin >> l >> k;
+        l--;
+        int low = l;
+        int high = n-1;
+        while(high - low > 1){
+            int mid = (high+low)/2;
+            // from l to mid
+            if(predicate(k,mid,l)){
+                low = mid;
+            }else{
+                high = mid;
+            }
+        }
+        if(predicate(k,high,l)) cout << high+1 << " ";
+        else if(predicate(k,low,l)) cout << low+1 << " ";
+        else cout << "-1" << " ";
+    }cout << "\n";
 }
 
 signed main() {
